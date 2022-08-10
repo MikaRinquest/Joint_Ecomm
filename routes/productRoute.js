@@ -34,6 +34,13 @@ router.get("/:id", (req, res) => {
 });
 
 // Add a product
-// router.post/
+// router.post("/add", (req, res) => {
+//     try {
+//         let sql = "INSERT INTO products SET ?"
+//         const = {
+
+//         }
+//     }
+// })
 
 module.exports = router;

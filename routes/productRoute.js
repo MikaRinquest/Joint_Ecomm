@@ -48,7 +48,7 @@ router.post("/", (req, res) => {
     };
     con.query(sql, products, (err, result) => {
       if (err) throw err;
-      res.send(result[0]);
+      res.send(result);
     });
   } catch (error) {
     console.log(error);
@@ -59,7 +59,7 @@ router.post("/", (req, res) => {
 // Edit single product
 router.put("/:id", (req, res) => {
   try {
-    let sql = "UPDATE products SET ?";
+    let sql = `UPDATE products SET ? where product_id = ${req.params.id}`;
     const { name, brand, description, price, type, state, url } = req.body;
     let product = { name, brand, description, price, type, state, url };
     con.query(sql, product, (err, result) => {

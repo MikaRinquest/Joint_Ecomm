@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
     let sql = "SELECT * FROM users";
     con.query(sql, (err, result) => {
       if (err) throw err;
-      res.send(result);
+      res.send(result[0]);
     });
   } catch (error) {
     console.log(error);
@@ -22,11 +22,8 @@ router.get("/", (req, res) => {
 // Display one user
 router.get("/:id", (req, res) => {
   try {
-    let sql = "SELECT * FROM users WHERE user_id = ?";
-    let user = {
-      user_id: req.body.user_id,
-    };
-    con.query(sql, user, (err, result) => {
+    let sql = `SELECT * FROM users WHERE user_id = ${req.params.id}`;
+    con.query(sql, (err, result) => {
       if (err) throw err;
       res.send(result);
     });
@@ -66,7 +63,7 @@ router.post("/register", (req, res) => {
   }
 });
 
-// Login  user
+// Login user
 router.post("/login", (req, res) => {
   try {
     let sql = "SELECT * FROM users WHERE ?";
@@ -111,6 +108,51 @@ router.post("/login", (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+});
+
+// Edit user details
+router.put("/:id", (req, res) => {
+  try {
+    let sql = "UPDATE users SET ?";
+    const { fullname, type, email, password, shipping_address, phone_number } =
+      req.body;
+    // Start encrypting
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    let user = {
+      fullname,
+      type,
+      email,
+      password: hash,
+      shipping_address,
+      phone_number,
+    };
+    con.query(sql, user, (err, result) => {
+      if (err) throw err;
+      res.send(`${user.fullname} was edited successfully.`);
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
+});
+
+// Turn user into an admin(uses patch method)
+
+//Delete user
+router.delete("/:id", (req, res) => {
+  try {
+    let sql = `DELETE FROM users WHERE user_id = ${req.params.id}`;
+
+    con.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send("User has been successfully deleted");
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
   }
 });
 

@@ -28,3 +28,14 @@ app.get("/", (req, res) => {
 // Setting the route links
 app.use("/users", userRoute);
 app.use("/products", productRoute);
+
+// Fixing cors error
+app.use(
+  cors({
+    origin: ["http://192.168.9.148:8080/", "http://localhost:8080/"],
+    credentials: true,
+  })
+);
+{
+  credentials: "include";
+}

@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
     let sql = "SELECT * FROM users";
     con.query(sql, (err, result) => {
       if (err) throw err;
-      res.send(result[0]);
+      res.send(result);
     });
   } catch (error) {
     console.log(error);
@@ -52,12 +52,11 @@ router.post("/register", (req, res) => {
     };
     con.query(sql, user, (err, result) => {
       if (err) throw err;
-      res.send(err);
+      res.send(`User ${user.fullname} was created.`);
     });
-    res.json(`User ${user.fullname} was created.`);
   } catch (error) {
     console.log(error);
-    res.status(400).send(error);
+    res.sendStatus(400).send(error);
   }
 });
 
@@ -138,6 +137,18 @@ router.put("/:id", (req, res) => {
 });
 
 // Turn user into an admin(uses patch method)
+router.patch("/:id", (req, res) => {
+  try {
+    let sql = `UPDATE users SET type = "Admin" where user_id = ${req.params.id}`;
+    con.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send("User has successfully became an Admin.");
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
+});
 
 //Delete user
 router.delete("/:id", (req, res) => {

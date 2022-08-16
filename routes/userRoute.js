@@ -34,7 +34,7 @@ router.get("/:id", (req, res) => {
 });
 
 // Registers a user
-router.post("/users/register", (req, res) => {
+router.post("/register", (req, res) => {
   try {
     let sql = "INSERT INTO users SET ?";
     const { fullname, email, password, shipping_address, phone_number } =
@@ -61,7 +61,7 @@ router.post("/users/register", (req, res) => {
 });
 
 // Login user
-router.post("/users/login", (req, res) => {
+router.post("/login", (req, res) => {
   try {
     let sql = "SELECT * FROM users WHERE ?";
     let user = { email: req.body.email };
